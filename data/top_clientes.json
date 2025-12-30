@@ -1,0 +1,29 @@
+{
+  "somaTotalBRL": 18564.32,
+  "ranking": [
+    {
+      "id": 3,
+      "cliente": "Carlos Pereira",
+      "totalBRL": 8761.92,
+      "totalUSD": 1600
+    },
+    {
+      "id": 2,
+      "cliente": "Maria Oliveira",
+      "totalBRL": 5476.2,
+      "totalUSD": 1000
+    },
+    {
+      "id": 1,
+      "cliente": "João da Silva",
+      "totalBRL": 3066.67,
+      "totalUSD": 560
+    },
+    {
+      "id": 4,
+      "cliente": "Ana Souza",
+      "totalBRL": 1259.53,
+      "totalUSD": 230
+    }
+  ]
+}
