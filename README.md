@@ -136,17 +136,17 @@ npm install
 3. **Configure o ambiente**
    Crie um arquivo `.env` na raiz do projeto:
 ```env
-PORT=3000
+PORT=8080
 ```
 
 4. **Inicie o servidor**
 
-   **Modo desenvolvimento:**
-   ```bash
-   npm start
-   ```
+**Modo desenvolvimento:**
+```bash
+npm start
+```
 
-   A API ficará disponível em: `http://localhost:8080`
+A API ficará disponível em: `http://localhost:8080`
 
 ## 🌐 Rotas da API
 
