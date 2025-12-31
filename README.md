@@ -78,8 +78,7 @@ npm test
 ## 🧪 Estrutura de Testes
 
 ```
-src/
-├── __tests__/
+├──tests/
 │   ├── mocks/
 │   │   └── order.service.mock.ts
 │   │   └── order.zod.mock.ts
