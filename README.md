@@ -124,7 +124,7 @@ Arquivo gerado a partir do relatório contendo:
 
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/Teste-Tecnico.git
+git clone https://github.com/paulophsj/Teste-Tecnico.git
 cd Teste-Tecnico
 ```
 
