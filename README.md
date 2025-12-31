@@ -23,6 +23,7 @@ API desenvolvida em Node.js + Express + TypeScript para processamento de pedidos
 - **Axios** - Requisições HTTP
 - **Dotenv** - Gerenciamento de variáveis de ambiente
 - **File System (fs/promises)** - Manipulação de arquivos
+- **Jest** - Testes unitários
 
 ## 📁 Estrutura do Projeto
 
@@ -46,6 +47,45 @@ src/
 ├── types/
 │   └── orders.type.ts        # Tipos TypeScript
 └── index.ts                 # Ponto de entrada
+```
+# 🧪 Testes Unitários
+
+O projeto inclui uma **solução completa de testes unitários**
+
+## 📊 Testes Implementados
+
+### ✅ **OrdersService**
+- `loadOrders()`
+- `loadBRLOrders()`
+- `getPedidos()`
+- `getAllValidOrders()`
+- `getAllInvalidOrders()`
+- `getRelatorios()`
+- `Integração com includeOrdersBRL()`
+
+### ✅ **Validation Schemas**
+- Validação de **pedidos válidos** (dados completos e corretos)
+- Validação de **pedidos inválidos** (campos faltantes, tipos errados, valores inválidos)
+
+## 🛠️ Executando os Testes
+
+### **Modo Desenvolvimento**
+```bash
+# Executar todos os testes uma vez
+npm test
+```
+
+## 🧪 Estrutura de Testes
+
+```
+src/
+├── __tests__/
+│   ├── mocks/
+│   │   └── order.service.mock.ts
+│   │   └── order.zod.mock.ts
+│   │
+│   └── order.service.spec.ts
+│   └── order.zod.spec.ts
 ```
 
 ## 📄 Arquivos de Dados
