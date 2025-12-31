@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
 
     "module": "nodenext",
     "target": "es2020",
 
-    "types": ["node"],
+    "types": ["jest", "node"],
 
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -14,5 +14,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
