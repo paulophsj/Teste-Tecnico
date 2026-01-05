@@ -1,12 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import ordersService from "../services/orders.service";
+import { HttpError } from "../util/error.util";
 
 export class OrdersController {
-  async nonRouter(res: Response) {
+  async nonRouter(req: Request, res: Response) {
     return res.status(404).json({message: "Endereço não localizado."})
   }
 
-  async getRelatorios(req: Request, res: Response) {
+  async getRelatorios(req: Request, res: Response, next: NextFunction) {
     try {
       const topParam = req.query.top;
 
@@ -17,42 +18,40 @@ export class OrdersController {
       }
 
       if (isNaN(top) || (top !== 0 && top < 3)) {
-        return res.status(400).json({
-          message: "O parâmetro 'top' deve ser um número igual a zero (para buscar todos), ou maior ou igual a três.",
-        });
+        throw new HttpError(400, "O parâmetro 'top' deve ser um número igual a zero (para buscar todos), ou maior ou igual a três.")
       }
 
       const response = await ordersService.getRelatorios(top);
-      return res.status(response.status).json(response.data);
+      return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).json({ message: "Erro interno do servidor" });
+      next(error)
     }
   }
 
-  async getPedidos(req: Request, res: Response) {
+  async getPedidos(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await ordersService.getPedidos();
-      return res.status(response.status).json(response.data);
+      return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).json({ message: "Erro interno do servidor" });
+      next(error)
     }
   }
 
-  async getAllValidOrders(req: Request, res: Response) {
+  async getAllValidOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await ordersService.getAllValidOrders();
-      return res.status(response.status).json(response.data);
+      return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).json({ message: "Erro interno do servidor" });
+      next(error)
     }
   }
 
-  async getAllInvalidOrders(req: Request, res: Response) {
+  async getAllInvalidOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await ordersService.getAllInvalidOrders();
-      return res.status(response.status).json(response.data);
+      return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).json({ message: "Erro interno do servidor" });
+      next(error)
     }
   }
 }

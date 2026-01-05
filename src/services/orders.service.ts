@@ -1,7 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { orderSchema } from "../schemas/zod.schema";
 import { Order, OrderBRL } from "../types/orders.type";
-import { includeOrdersBRL } from "../util/orders.brl.util";
+import ordersBrlUtil from "../util/orders.brl.util";
+import { HttpError } from "../util/error.util";
 
 export class OrdersService {
   private ordersPath = "./data/orders.json";
@@ -10,12 +11,30 @@ export class OrdersService {
 
   private async loadOrders(): Promise<Array<Partial<Order>>> {
     const file = await readFile(this.ordersPath, "utf-8");
+
+    if (!file) {
+      throw new HttpError(400, "Erro ao abrir arquivo.");
+    }
+
     return JSON.parse(file);
   }
 
   private async loadBRLOrders(): Promise<Array<OrderBRL>> {
-    const file = await readFile(this.ordersBRLPath, "utf-8");
-    return file.trim() ? JSON.parse(file) : [];
+    try {
+      let file = await readFile(this.ordersBRLPath, "utf-8");
+
+      if (!file.trim()) {
+        console.log(
+          "O arquivo ainda não possui dados. Gerando dados com base nos valores válidos..."
+        );
+        await this.getAllValidOrders();
+        file = await readFile(this.ordersBRLPath, "utf-8");
+      }
+
+      return JSON.parse(file);
+    } catch (error) {
+      throw new HttpError(400, "Erro ao ler o arquivo 'orders_total_brl' ");
+    }
   }
 
   async getPedidos() {
@@ -29,38 +48,36 @@ export class OrdersService {
       orders = await this.loadBRLOrders();
     }
 
-    return {
-      status: 200,
-      data: orders,
-    };
+    return orders;
   }
 
   async getAllValidOrders() {
-    const orders = await this.loadOrders();
-    const validOrders: Order[] = [];
+    try {
+      const orders = await this.loadOrders();
+      const validOrders: Order[] = [];
 
-    for (const order of orders) {
-      const parsedOrder = orderSchema.safeParse(order);
+      for (const order of orders) {
+        const parsedOrder = orderSchema.safeParse(order);
 
-      if (!parsedOrder.success) {
-        parsedOrder.error.issues.forEach(issue =>
-          console.error({
-            message: issue.message,
-            errorData: order,
-          })
-        );
-        continue;
+        if (!parsedOrder.success) {
+          parsedOrder.error.issues.forEach((issue) =>
+            console.error({
+              message: issue.message,
+              errorData: order,
+            })
+          );
+          continue;
+        }
+
+        validOrders.push(parsedOrder.data);
       }
 
-      validOrders.push(parsedOrder.data);
+      await ordersBrlUtil.includeOrdersBRL(validOrders);
+
+      return validOrders;
+    } catch (error) {
+      throw error;
     }
-
-    await includeOrdersBRL(validOrders);
-
-    return {
-      status: 200,
-      data: validOrders,
-    };
   }
 
   async getAllInvalidOrders() {
@@ -74,26 +91,21 @@ export class OrdersService {
       }
     }
 
-    return {
-      status: 200,
-      data: invalidOrders,
-    };
+    return invalidOrders;
   }
 
   async getRelatorios(top: number) {
     const pedidos = await this.getPedidos();
 
-    const totalPedidos = pedidos.data.length;
+    const totalPedidos = pedidos.length;
     const rankingLimit = top === 0 ? totalPedidos : top;
 
-    const ranking = [...pedidos.data]
+    const ranking = [...pedidos]
       .sort((a, b) => b.totalBRL - a.totalBRL)
       .slice(0, rankingLimit);
 
     const somaTotalBRL = Number(
-      ranking
-        .reduce((acc, pedido) => acc + pedido.totalBRL, 0)
-        .toFixed(2)
+      ranking.reduce((acc, pedido) => acc + pedido.totalBRL, 0).toFixed(2)
     );
 
     await writeFile(
@@ -113,11 +125,8 @@ export class OrdersService {
     );
 
     return {
-      status: 200,
-      data: {
-        somaTotalBRL,
-        clientes: ranking,
-      },
+      somaTotalBRL,
+      ranking,
     };
   }
 }
