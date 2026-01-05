@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import ordersService from "../services/orders.service";
 
 export class OrdersController {
+  async nonRouter(res: Response) {
+    return res.status(404).json({message: "Endereço não localizado."})
+  }
+
   async getRelatorios(req: Request, res: Response) {
     try {
       const topParam = req.query.top;

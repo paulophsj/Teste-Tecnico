@@ -8,4 +8,6 @@ router.get("/pedidos", ordersController.getPedidos);
 router.get("/validos", ordersController.getAllValidOrders);
 router.get("/invalidos", ordersController.getAllInvalidOrders);
 
+router.use(ordersController.nonRouter)
+
 export default router;
