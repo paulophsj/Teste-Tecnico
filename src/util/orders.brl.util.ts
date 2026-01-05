@@ -67,8 +67,7 @@ export class OrdersBRL {
         JSON.stringify(convertedOrders, null, 2),
         "utf-8"
       );
-      console.log("Pedidos válidos inclusos.");
-      return;
+      return console.log("Pedidos válidos inclusos.");
     } catch (error) {
       if (error instanceof HttpError) {
         throw error;

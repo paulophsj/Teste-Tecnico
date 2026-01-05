@@ -10,13 +10,20 @@ export class OrdersService {
   private rankingPath = "./data/top_clientes.json";
 
   private async loadOrders(): Promise<Array<Partial<Order>>> {
-    const file = await readFile(this.ordersPath, "utf-8");
-
-    if (!file) {
-      throw new HttpError(400, "Erro ao abrir arquivo.");
+    try {
+      let file = await readFile(this.ordersPath, "utf-8");
+  
+      if(!file.trim()){
+        throw new HttpError(400, "O arquivo principal da aplicação não possui dados. Por favor, insira dados em 'orders.json'")
+      }
+  
+      return JSON.parse(file);
+    } catch (error) {
+      if(error instanceof HttpError){
+        throw error
+      }
+      throw new HttpError(400, "Erro ao ler o arquivo 'orders.json' ");
     }
-
-    return JSON.parse(file);
   }
 
   private async loadBRLOrders(): Promise<Array<OrderBRL>> {

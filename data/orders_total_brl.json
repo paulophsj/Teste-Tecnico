@@ -2,25 +2,25 @@
   {
     "id": 1,
     "cliente": "João da Silva",
-    "totalBRL": 3029.49,
+    "totalBRL": 3029.54,
     "totalUSD": 560
   },
   {
     "id": 2,
     "cliente": "Maria Oliveira",
-    "totalBRL": 5409.8,
+    "totalBRL": 5409.9,
     "totalUSD": 1000
   },
   {
     "id": 3,
     "cliente": "Carlos Pereira",
-    "totalBRL": 8655.68,
+    "totalBRL": 8655.84,
     "totalUSD": 1600
   },
   {
     "id": 4,
     "cliente": "Ana Souza",
-    "totalBRL": 1244.25,
+    "totalBRL": 1244.28,
     "totalUSD": 230
   }
 ]
